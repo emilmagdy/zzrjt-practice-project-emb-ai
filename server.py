@@ -19,11 +19,14 @@ def sent_analyzer():
         score for the provided text.
     '''
     text_to_analyze = request.args.get("textToAnalyze")
-    response_json = sentiment_analyzer(text_to_analyze)
-    score = response_json["documentSentiment"]["score"]
-    label = response_json["documentSentiment"]["label"]
-    sent = label.split("_")[1]
-    return "The given text has been identified as {} with a score of {}".format(sent , score) 
+    response = sentiment_analyzer(text_to_analyze)
+    score = response["score"]
+    label = response["label"]
+    if label is None:
+        return "Invalid input, Try again"
+    else:
+        sent = label.split("_")[1]
+        return "The given text has been identified as {} with a score of {}".format(sent , score) 
     
 @app.route("/")
 def render_index_page():
